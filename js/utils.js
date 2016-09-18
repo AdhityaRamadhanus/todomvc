@@ -1,6 +1,6 @@
 var app = app || {};
 
-(function () {
+// (function () {
 	'use strict';
 
 	app.Utils = {
@@ -45,6 +45,17 @@ var app = app || {};
 				}
 			}
 			return newObj;
+		},
+
+		graphql: (model, options) => {
+			$.ajax({
+				method: 'POST',
+				contentType: 'application/graphql',
+				url: 'http://localhost:3000/',
+				data: options.queryString
+			}).done((response, code) => {
+				options.callback(model, response.data[options.queryName])
+			})
 		}
 	};
-})();
+// })();
