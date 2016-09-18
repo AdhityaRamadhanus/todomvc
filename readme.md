@@ -1,4 +1,4 @@
-# ![TodoMVC](media/logo.png) ![ReactJs](media/reactjs.png)
+# ![ReactJs](media/reactjs.png) ![Graphql](media/graphql.png) ![TodoMVC](media/logo.png)
 
 > Helping you select an MV\* framework
 
