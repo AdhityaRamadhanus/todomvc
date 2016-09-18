@@ -88,7 +88,6 @@ var app = app || {};
 			var footer;
 			var main;
 			var todos = this.props.model.todos;
-
 			var shownTodos = todos.filter(function (todo) {
 				switch (this.state.nowShowing) {
 				case app.ACTIVE_TODOS:
@@ -99,7 +98,6 @@ var app = app || {};
 					return true;
 				}
 			}, this);
-
 			var todoItems = shownTodos.map(function (todo) {
 				return (
 					<TodoItem
@@ -168,7 +166,6 @@ var app = app || {};
 	});
 
 	var model = new app.TodoModel('react-todos');
-
 	function render() {
 		React.render(
 			<TodoApp model={model}/>,

@@ -76,6 +76,7 @@ var app = app || {};
 		},
 
 		render: function () {
+			console.log('render todo item')
 			return (
 				<li className={classNames({
 					completed: this.props.todo.completed,

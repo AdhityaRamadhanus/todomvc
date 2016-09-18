@@ -17,7 +17,6 @@ app.TodoModel = function (key) {
 			queryName: 'todos',
 			queryString: 'query { todos { id, title, completed } }',
 			callback: (model, data) => {
-				console.log(JSON.stringify(data))
 				model.todos = data
 				model.inform()
 			}
@@ -39,47 +38,64 @@ app.TodoModel.prototype.addTodo = function (title) {
 		queryName: 'add',
 		queryString: queryString,
 		callback: (model, data) => {
-			console.log(data)
 			model.todos.push(data)
 			model.inform()
 		}
 	})
 }
 
-	app.TodoModel.prototype.toggleAll = function (checked) {
-		// Note: it's usually better to use immutable data structures since they're
-		// easier to reason about and React works very well with them. That's why
-		// we use map() and filter() everywhere instead of mutating the array or
-		// todo items themselves.
-		// this.todos = this.todos.map(function (todo) {
-		// 	return Utils.extend({}, todo, {completed: checked});
-		// });
-
-		this.inform();
-	};
+app.TodoModel.prototype.toggleAll = function (checked) {
+	var queryString = 'mutation { toggleAll { id, title, completed } }'
+	graphQL({
+		queryName: 'add',
+		queryString: queryString,
+		callback: (model, data) => {
+			model.todos = data
+			model.inform()
+		}
+	})
+}
 
 	app.TodoModel.prototype.toggle = function (todoToToggle) {
-		// this.todos = this.todos.map(function (todo) {
-		// 	return todo !== todoToToggle ?
-		// 		todo :
-		// 		Utils.extend({}, todo, {completed: !todo.completed});
-		// });
-
-		this.inform();
+		var queryString = `mutation { toggleOne (id: "${todoToToggle.id}") { id, title, completed } }`
+		graphQL({
+			queryName: 'toggleOne',
+			queryString: queryString,
+			callback: (model, data) => {
+				model.todos = model.todos.map((todo) => {
+					return todo.id !== todoToToggle.id
+						? todo
+						: Utils.extend({}, todo, {completed: data.completed});
+				})
+				model.inform()
+			}
+		})
 	};
 
 	app.TodoModel.prototype.destroy = function (todo) {
-		console.log(JSON.stringify(todo))
-
-		this.inform();
+		var queryString = `mutation { delete (id: "${todo.id}") { id, title, completed } }`
+		graphQL({
+			queryName: 'delete',
+			queryString: queryString,
+			callback: (model, data) => {
+				model.todos = model.todos.filter((todo) => { return todo.id !== data.id })
+				model.inform()
+			}
+		})
 	};
 
 	app.TodoModel.prototype.save = function (todoToSave, text) {
-		// this.todos = this.todos.map(function (todo) {
-		// 	return todo !== todoToSave ? todo : Utils.extend({}, todo, {title: text});
-		// });
-
-		this.inform();
+		var queryString = `mutation { update (id: "${todoToSave.id}", title: "${text}") { id, title, completed } }`
+		graphQL({
+			queryName: 'update',
+			queryString: queryString,
+			callback: (model, data) => {
+				model.todos = model.todos.map((todo) => {
+					return todo.id !== todoToSave.id ? todo : Utils.extend({}, todo, {title: data.title});
+				})
+				model.inform()
+			}
+		})
 	};
 
 	app.TodoModel.prototype.clearCompleted = function () {
