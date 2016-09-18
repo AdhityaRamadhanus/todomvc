@@ -5,7 +5,7 @@
 /*global React */
 var app = app || {};
 
-(function () {
+// (function () {
 	'use strict';
 
 	var ESCAPE_KEY = 27;
@@ -105,4 +105,4 @@ var app = app || {};
 			);
 		}
 	});
-})();
+// })();

@@ -5,7 +5,7 @@
 /*global React, Router*/
 var app = app || {};
 
-(function () {
+// (function () {
 	'use strict';
 
 	app.ALL_TODOS = 'all';
@@ -178,4 +178,4 @@ var app = app || {};
 
 	model.subscribe(render);
 	render();
-})();
+// })();

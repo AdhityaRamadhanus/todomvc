@@ -5,7 +5,7 @@
 /*global React */
 var app = app || {};
 
-(function () {
+// (function () {
 	'use strict';
 
 	app.TodoFooter = React.createClass({
@@ -59,4 +59,4 @@ var app = app || {};
 			);
 		}
 	});
-})();
+// })();
