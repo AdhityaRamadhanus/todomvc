@@ -108,5 +108,5 @@ app.TodoModel.prototype.clearCompleted = function () {
 			model.inform()
 		}
 	})
-};
+}
 
