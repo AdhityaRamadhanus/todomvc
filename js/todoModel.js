@@ -56,54 +56,57 @@ app.TodoModel.prototype.toggleAll = function (checked) {
 	})
 }
 
-	app.TodoModel.prototype.toggle = function (todoToToggle) {
-		var queryString = `mutation { toggleOne (id: "${todoToToggle.id}") { id, title, completed } }`
-		graphQL({
-			queryName: 'toggleOne',
-			queryString: queryString,
-			callback: (model, data) => {
-				model.todos = model.todos.map((todo) => {
-					return todo.id !== todoToToggle.id
-						? todo
-						: Utils.extend({}, todo, {completed: data.completed});
-				})
-				model.inform()
-			}
-		})
-	};
+app.TodoModel.prototype.toggle = function (todoToToggle) {
+	var queryString = `mutation { toggleOne (id: "${todoToToggle.id}") { id, title, completed } }`
+	graphQL({
+		queryName: 'toggleOne',
+		queryString: queryString,
+		callback: (model, data) => {
+			model.todos = model.todos.map((todo) => {
+				return todo.id !== todoToToggle.id
+					? todo
+					: Utils.extend({}, todo, {completed: data.completed})
+			})
+			model.inform()
+		}
+	})
+}
 
-	app.TodoModel.prototype.destroy = function (todo) {
-		var queryString = `mutation { delete (id: "${todo.id}") { id, title, completed } }`
-		graphQL({
-			queryName: 'delete',
-			queryString: queryString,
-			callback: (model, data) => {
-				model.todos = model.todos.filter((todo) => { return todo.id !== data.id })
-				model.inform()
-			}
-		})
-	};
+app.TodoModel.prototype.destroy = function (todo) {
+	var queryString = `mutation { delete (id: "${todo.id}") { id, title, completed } }`
+	graphQL({
+		queryName: 'delete',
+		queryString: queryString,
+		callback: (model, data) => {
+			model.todos = model.todos.filter((todo) => { return todo.id !== data.id })
+			model.inform()
+		}
+	})
+}
 
-	app.TodoModel.prototype.save = function (todoToSave, text) {
-		var queryString = `mutation { update (id: "${todoToSave.id}", title: "${text}") { id, title, completed } }`
-		graphQL({
-			queryName: 'update',
-			queryString: queryString,
-			callback: (model, data) => {
-				model.todos = model.todos.map((todo) => {
-					return todo.id !== todoToSave.id ? todo : Utils.extend({}, todo, {title: data.title});
-				})
-				model.inform()
-			}
-		})
-	};
+app.TodoModel.prototype.save = function (todoToSave, text) {
+	var queryString = `mutation { update (id: "${todoToSave.id}", title: "${text}") { id, title, completed } }`
+	graphQL({
+		queryName: 'update',
+		queryString: queryString,
+		callback: (model, data) => {
+			model.todos = model.todos.map((todo) => {
+				return todo.id !== todoToSave.id ? todo : Utils.extend({}, todo, {title: data.title})
+			})
+			model.inform()
+		}
+	})
+}
 
-	app.TodoModel.prototype.clearCompleted = function () {
-		this.todos = this.todos.filter(function (todo) {
-			return !todo.completed;
-		});
+app.TodoModel.prototype.clearCompleted = function () {
+	var queryString = `mutation { deleteCompleted { id, title, completed } }`
+	graphQL({
+		queryName: 'deleteCompleted',
+		queryString: queryString,
+		callback: (model, data) => {
+			model.todos = data
+			model.inform()
+		}
+	})
+};
 
-		this.inform();
-	};
-
-//})();
